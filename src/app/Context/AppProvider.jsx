@@ -18,6 +18,7 @@ export const AppContextProvider = ({ children }) => {
   });
   const [coinList, setCoinList] = useState({});
   const [favorites, setFavorites] = useState([]);
+  const [defaultCoinList, setDefaultCoinList] = useState({});
 
   const MAX_FAVORITES = 10;
 
@@ -56,6 +57,11 @@ export const AppContextProvider = ({ children }) => {
     setCoinList(coinList);
   };
 
+  const fetchDefaultCoins = async () => {
+    const coinDefaultList = (await cc.coinList()).Data;
+    setDefaultCoinList(coinDefaultList);
+  };
+
   const addCoin = (key) => {
     let copyFavorites = [...favorites];
     if (favorites.length < MAX_FAVORITES) {
@@ -77,24 +83,26 @@ export const AppContextProvider = ({ children }) => {
     setFavorites(copyFavorites);
   };
 
-  useEffect(() => {
-    savedSettings();
-  }, []);
+  const setFilteredCoins = (filteredCoins) => setCoinList(filteredCoins);
 
   useEffect(() => {
+    savedSettings();
     fetchCoins();
+    fetchDefaultCoins();
   }, []);
 
   const value = {
     page: pageData.page,
     firstVisit: pageData.firstVisit,
     coinList,
+    defaultCoinList,
     favorites,
     setPage: setPageData,
     confirmFavorites,
     addCoin,
     removeCoin,
     isInFavorites,
+    setFilteredCoins,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

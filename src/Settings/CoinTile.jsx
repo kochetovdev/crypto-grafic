@@ -15,8 +15,8 @@ export default function ({ coinKey, topSection }) {
   };
   return (
     <AppContext.Consumer>
-      {({ coinList, addCoin, removeCoin, isInFavorites }) => {
-        let coin = coinList[coinKey];
+      {({ defaultCoinList, addCoin, removeCoin, isInFavorites }) => {
+        let coin = defaultCoinList[coinKey];
         let TileClass = SelectableTile;
         if (topSection) {
           TileClass = DeletableTile;
